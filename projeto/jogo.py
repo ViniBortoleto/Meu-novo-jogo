@@ -20,6 +20,18 @@ class Personagem:
     def mais_detalhes(self):
         return f"Nome: {self.get_nome()}\nVida: {self.get_HP()}\nNivel de Luz: {self.get_nivel_de_luz()}"
     
+    def receber_dano(self, dano):
+        self.__HP -= dano
+        if self.__HP < 0:
+            self.__HP = 0
+    
+    def ataque(self, alvo):
+        dano = self.__nivel_de_luz * 2
+        alvo.receber_dano(dano)
+        print(f"{self.get_nome()} atacou {alvo.get_nome()} e deu {dano} de dano")
+    
+   
+    
 class Hunter(Personagem):
     def __init__(self, nome, nivel_de_luz, HP, Habilidade_Suprema):
         super().__init__(nome, nivel_de_luz, HP)
@@ -43,7 +55,37 @@ class Cabal(Personagem):
     def get_tipo(self):
         return self.__tipo
     
-Guardiao = Hunter(nome="Cacador", HP=200, nivel_de_luz=100, Habilidade_Suprema="Tiro certeiro")
+
+Guardiao = Hunter(nome="Cacador", HP=200, nivel_de_luz=50, Habilidade_Suprema="Tiro certeiro")
 print(Guardiao.mais_detalhes())
-Inimigo = Cabal(nome="Cabal", HP=250, nivel_de_luz=50, tipo="Prismatico")
+Inimigo = Cabal(nome="Cabal", HP=250, nivel_de_luz=25, tipo="Prismatico")
 print(Inimigo.mais_detalhes())
+
+
+# Classe orquestradora
+class Jogo:
+
+    def __init__(self):
+        self.Guardiao = Hunter(nome="Cacador", HP=60, nivel_de_luz=5, Habilidade_Suprema="Tiro certeiro")
+        self.Cabal = Cabal(nome="Cabal", HP=50, nivel_de_luz=31, tipo="Prismatico")
+     
+    def iniciar_assalto(self):
+        print("Iniciando Assalto")
+        while self.Guardiao.get_HP() > 0 and self.Cabal.get_HP() > 0:
+            print("\nDetalhes dos Guardioes")
+            print(self.Guardiao.mais_detalhes())
+            print(self.Cabal.mais_detalhes())
+
+            input("Precione enter para selecionar o Golpe desejado...")
+            choice = input("Escolha (1- Ataque Basico, 2- Habilidade suprema): ")
+        
+            if choice == "1":
+                self.Guardiao.ataque(self.Cabal)
+            else:
+                print("Escolha invalida, escolha novamente")
+
+
+
+# Criando instancia para iniciar
+jogo = Jogo()
+jogo.iniciar_assalto()
